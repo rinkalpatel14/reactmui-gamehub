@@ -75,7 +75,7 @@ const TicTacToe = () => {
             })
         }
         else {
-            setTurn(turn == "X" ? "O" : "X") //change turn
+            setTurn(turn === "X" ? "O" : "X") //change turn
         }
 
     }

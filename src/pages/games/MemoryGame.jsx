@@ -3,6 +3,15 @@ import { Box, Typography, Grid, Card, Stack, Button } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import bg from '../../images/gamebg3.jpg'
 
+//cards list
+const CARD_DATA = [
+  "🍎", "🍌", "🍇", "🍉",
+  "🍓", "🍒", "🥝", "🍍",
+  "🍎", "🍌", "🍇", "🍉",
+  "🍓", "🍒", "🥝", "🍍",
+];
+
+
 const MemoryGame = () => {
 
   // const [flippedIndex, setFlippedIndex] = useState(null) //for singlecard
@@ -12,29 +21,24 @@ const MemoryGame = () => {
   const [time, setTime] = useState(0);      // time in seconds
   const [isRunning, setIsRunning] = useState(true); //timer on/off
 
-  //cards list
-  const cardData = [
-    "🍎", "🍌", "🍇", "🍉",
-    "🍓", "🍒", "🥝", "🍍",
-    "🍎", "🍌", "🍇", "🍉",
-    "🍓", "🍒", "🥝", "🍍",
-  ];
+  const cardData = CARD_DATA
 
   //Match cards
   useEffect(() => {
     if (firstCard !== null && secondCard !== null) {
 
       if (cardData[firstCard] === cardData[secondCard]) {
-        setMatchedCards((prev) => [...prev, firstCard, secondCard]);
+        setMatchedCards(prev => [...prev, firstCard, secondCard])
       }
 
-      setTimeout(() => {
-        setFirstCard(null);
-        setSecondCard(null);
-      }, 1000);
-    }
+      const timer = setTimeout(() => {
+        setFirstCard(null)
+        setSecondCard(null)
+      }, 1000)
 
-  }, [firstCard, secondCard,cardData]);
+      return () => clearTimeout(timer)
+    }
+  }, [firstCard, secondCard, cardData])
 
   //Timer
   useEffect(() => {
@@ -54,22 +58,21 @@ const MemoryGame = () => {
       toast.success("🎉 Congratulations! You Win!", {
         position: "top-center",
         autoClose: 3000,
-      });
+      })
     }
-  }, [matchedCards,cardData])
+  }, [matchedCards, cardData])
 
   //onclick 
   const handleClick = (index) => {
-
     if (
       index === firstCard ||
       index === secondCard ||
       matchedCards.includes(index)
-    ) return;
+    ) return
 
     firstCard === null
       ? setFirstCard(index)
-      : setSecondCard(index);
+      : setSecondCard(index)
   }
 
   // format time
@@ -81,12 +84,12 @@ const MemoryGame = () => {
 
   //reset game
   const resetGame = () => {
-    setFirstCard(null);
-    setSecondCard(null);
-    setMatchedCards([]);
-    setTime(0);
-    setIsRunning(true);
-  };
+    setFirstCard(null)
+    setSecondCard(null)
+    setMatchedCards([])
+    setTime(0)
+    setIsRunning(true)
+  }
 
   return (
     <>
