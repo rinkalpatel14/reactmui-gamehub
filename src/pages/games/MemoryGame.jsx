@@ -101,85 +101,79 @@ const MemoryGame = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          px: 1,
         }}
       >
-
         <Card
           sx={{
-            width: 550,
-            p: 4,
+            width: "100%",
+            maxWidth: 420,
+            p: { xs: 2, sm: 3 },
             borderRadius: 4,
             background: "linear-gradient(180deg,#0f172a,#020617)",
             color: "#fff",
           }}
         >
-          {/* title */}
-          <Typography
-            variant="h4"
-            textAlign="center"
-            mb={1}
-            fontWeight="bold"
-          >
-            Memory Game
+          <Typography variant="h5" textAlign="center" fontWeight="bold">
+             Memory Game
           </Typography>
 
-          {/* timer */}
           <Typography textAlign="center" mb={2}>
             ⏱ Time: {formatTime()}
           </Typography>
 
-
-          <Grid container spacing={2} justifyContent="center" sx={{ width: 460, margin: "auto", mb: 2 }}>
-            {cardData.map((i, index) => (
-              <Grid item key={i}>
-                <Card
-                  onClick={() => handleClick(index)}
-                  sx={{
-                    width: 80,
-                    height: 80,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 32,
-                    cursor: "pointer",
-                    backgroundColor: matchedCards.includes(index)
-                      ? "#4caf50"
-                      : "#1976d2",
-                    color: "white",
-                    transition: "0.3s",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                    }
-                  }}
-
-                >
-                  {matchedCards.includes(index) ||
-                    index === firstCard ||
-                    index === secondCard
-                    ? i
-                    : "❓"}
-                </Card>
-              </Grid>
+          {/* gane cards */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)", // 👈 ALWAYS 4 per row
+              gap: 1.5,
+              mb: 2,
+            }}
+          >
+            {cardData.map((item, index) => (
+              <Card
+                key={index}
+                onClick={() => handleClick(index)}
+                sx={{
+                  aspectRatio: "1 / 1",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "clamp(18px, 4vw, 28px)",
+                  cursor: "pointer",
+                  backgroundColor: matchedCards.includes(index)
+                    ? "#4caf50"
+                    : "#1976d2",
+                  color: "#fff",
+                  borderRadius: 2,
+                  boxShadow: 3,
+                }}
+              >
+                {matchedCards.includes(index) ||
+                  index === firstCard ||
+                  index === secondCard
+                  ? item
+                  : "❓"}
+              </Card>
             ))}
-          </Grid>
+          </Box>
 
-          {/* Buttons */}
-          <Stack spacing={1}>
-            <Button
-              variant="contained"
-              onClick={resetGame} >
-              Reset Game
+          <Stack spacing={1.2}>
+            <Button variant="contained" fullWidth onClick={resetGame}>
+               Reset Game
             </Button>
             <Button
               variant="outlined"
+              fullWidth
               onClick={() => (window.location.href = "/dashboard")}
               sx={{ color: "#94a3b8" }}
             >
               ⬅ Back to Dashboard
             </Button>
           </Stack>
-
         </Card>
+
         <ToastContainer />
       </Box>
     </>
