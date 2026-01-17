@@ -58,6 +58,7 @@ const MemoryGame = () => {
     }
   }, [matchedCards])
 
+  //onclick 
   const handleClick = (index) => {
 
     if (
