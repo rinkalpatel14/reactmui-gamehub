@@ -1,34 +1,41 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, Button, Grid, Card, } from "@mui/material";
+import { Box, Typography, Avatar, Button, TextField, Chip, Grid, Card } from '@mui/material'
 import LogoutIcon from "@mui/icons-material/Logout";
-import Avatar from "@mui/material/Avatar";
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
-import TextField from "@mui/material/TextField";
-import Chip from "@mui/material/Chip";
+import '../dashboard/Dashboard.css'
 
 const Dashboard = () => {
 
     const [user, setUser] = useState(null)
-    const history = useHistory();
+    const history = useHistory()
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("all");
 
-    useEffect(() => {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+    useEffect(() => { //page load then it's run
+        const currentUser = JSON.parse(localStorage.getItem("currentUser")); //saved user
         setUser(currentUser);
+    }, []);
 
-    }, [])
-
-    //logout button
+    //logout
     const handleLogout = () => {
-        localStorage.removeItem("currentUser"); //user clear
-        history.push("/login");
-    };
+        localStorage.removeItem("currentUser")
+        history.push("login");
+    }
+
+    //filter list
+    const filters = [
+        { label: "All Games", value: "all", icon: <SportsEsportsIcon /> },
+        { label: "Favourite", value: "fav", icon: <FavoriteIcon /> },
+        { label: "Puzzle", value: "puzzle", icon: <ExtensionIcon /> },
+        { label: "Memory", value: "memory", icon: <PsychologyIcon /> },
+        { label: "Strategy", value: "strategy", icon: <SportsEsportsIcon /> },
+    ];
 
     //game cards 
     const games = [
@@ -74,18 +81,15 @@ const Dashboard = () => {
 
     return (
         <>
-            <Box
-                sx={{
-                    minHeight: "100vh",
-                    backgroundImage: `linear-gradient(rgba(2,6,23,0.82), rgba(2,6,23,0.82)),url()`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    // px: 2,
-                    overflow: 'hidden'
-                }}
-            >
-                {/* ===== COMPACT HEADER ===== */}
+            <Box sx={{
+                minHeight: "100vh",
+                backgroundImage: `linear-gradient(rgba(2,6,23,0.82), rgba(2,6,23,0.82)),url()`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                overflow: 'hidden'
+            }}>
+                {/* header */}
                 <Box
                     sx={{
                         background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)",
@@ -100,8 +104,7 @@ const Dashboard = () => {
                         boxShadow: "0 10px 30px rgba(0,0,0,0.55)",
                     }}
                 >
-                    {/* Left */}
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                         <Avatar
                             sx={{
                                 bgcolor: "#1e3c72",
@@ -126,21 +129,9 @@ const Dashboard = () => {
                             >
                                 GAMEHUB
                             </Typography>
-                            <Typography
-                                sx={{
-                                    fontSize: 14,
-                                    fontWeight: 400,
-                                    color: "#e5e7eb",
-                                }}
-                            >
+                            <Typography sx={{ fontSize: 14, fontWeight: 400, color: "#e5e7eb" }}>
                                 Hi 👋{" "}
-                                <Box
-                                    component="span"
-                                    sx={{
-                                        color: "#38bdf8",
-                                        fontWeight: 600,
-                                    }}
-                                >
+                                <Box component="span" sx={{ color: "#38bdf8", fontWeight: 600, }}>
                                     {user?.username}
                                 </Box>
                                 , let’s play & learn 🎮
@@ -148,7 +139,6 @@ const Dashboard = () => {
                         </Box>
                     </Box>
 
-                    {/* Right */}
                     <Button
                         onClick={handleLogout}
                         startIcon={<LogoutIcon />}
@@ -170,7 +160,7 @@ const Dashboard = () => {
                     </Button>
                 </Box>
 
-                {/* ===== SEARCH & FILTER BAR (ONE LINE) ===== */}
+                {/* search and filter bar */}
                 <Box
                     sx={{
                         mb: 4,
@@ -182,7 +172,6 @@ const Dashboard = () => {
                         flexWrap: "wrap", // responsive
                     }}
                 >
-                    {/* 🔍 SEARCH */}
                     <TextField
                         size="small"
                         placeholder="Search games…"
@@ -190,44 +179,13 @@ const Dashboard = () => {
                         onChange={(e) => setSearch(e.target.value)}
                         InputProps={{
                             startAdornment: (
-                                <SearchIcon sx={{ mr: 1,color: "#7dd3fc" }} />
+                                <SearchIcon className="search-icon" />
                             ),
                         }}
-                        sx={{
-                            flex: 1,
-                            minWidth: 220,
-
-                            "& .MuiOutlinedInput-root": {
-                                background:
-                                    "linear-gradient(135deg, rgba(15,42,48,0.85), rgba(30,64,75,0.9))",
-                                backdropFilter: "blur(14px)",
-                                borderRadius: 3,
-                                fontSize: 14,
-                                color: "#e5e7eb",
-
-                                "& input::placeholder": {
-                                    color: "#cbd5e1",
-                                    opacity: 1,
-                                },
-
-                                "& fieldset": {
-                                    borderColor: "rgba(255,255,255,0.18)",
-                                },
-
-                                "&:hover fieldset": {
-                                    borderColor: "#38bdf8",
-                                },
-
-                                "&.Mui-focused fieldset": {
-                                    borderColor: "#38bdf8",
-                                    borderWidth: 1.5,
-                                    boxShadow: "0 0 0 3px rgba(56,189,248,0.35)",
-                                },
-                            },
-                        }}
+                        className="search-input"
                     />
 
-                    {/* 🎮 FILTER CHIPS */}
+                    {/* filter chips */}
                     <Box
                         sx={{
                             display: "flex",
@@ -236,13 +194,7 @@ const Dashboard = () => {
                             justifyContent: "flex-end",
                         }}
                     >
-                        {[
-                            { label: "All Games", value: "all", icon: <SportsEsportsIcon /> },
-                            { label: "Favourite", value: "fav", icon: <FavoriteIcon /> },
-                            { label: "Puzzle", value: "puzzle", icon: <ExtensionIcon /> },
-                            { label: "Memory", value: "memory", icon: <PsychologyIcon /> },
-                            { label: "Strategy", value: "strategy", icon: <SportsEsportsIcon /> },
-                        ].map((item) => (
+                        {filters.map((item) => (
                             <Chip
                                 key={item.value}
                                 label={item.label}
@@ -276,7 +228,7 @@ const Dashboard = () => {
                 </Box>
                 {/* Game Cards */}
                 <Grid container spacing={4} justifyContent="center" sx={{ px: 3 }}>
-                    {games.map((game, i) => (
+                    {filteredGames.map((game, i) => (
                         <Grid key={i} size={{ xs: 12, md: 4 }}>
                             <Card
                                 sx={{
