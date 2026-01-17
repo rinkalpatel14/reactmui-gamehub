@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, Grid, Card, Stack, Button } from "@mui/material";
+import { Box, Typography, Card, Stack, Button } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import bg from '../../images/gamebg3.jpg'
 
