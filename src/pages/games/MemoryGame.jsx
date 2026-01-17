@@ -34,7 +34,7 @@ const MemoryGame = () => {
       }, 1000);
     }
 
-  }, [firstCard, secondCard]);
+  }, [firstCard, secondCard,cardData]);
 
   //Timer
   useEffect(() => {
@@ -56,7 +56,7 @@ const MemoryGame = () => {
         autoClose: 3000,
       });
     }
-  }, [matchedCards])
+  }, [matchedCards,cardData])
 
   //onclick 
   const handleClick = (index) => {

@@ -14,7 +14,7 @@ const Register = () => {
 
     const [list, setlist] = useState([])
     const token = "wEyqnV7rzghA70Se"
-    const [ini, setIni] = useState({
+    const ini = useState({
         username: '',
         email: '',
         password: ''
