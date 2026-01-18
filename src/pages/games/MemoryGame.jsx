@@ -11,6 +11,8 @@ const CARD_DATA = [
   "🍓", "🍒", "🥝", "🍍",
 ];
 
+const maxTime = 60; // 60 sec
+
 
 const MemoryGame = () => {
 
@@ -20,6 +22,7 @@ const MemoryGame = () => {
   const [matchedCards, setMatchedCards] = useState([]);
   const [time, setTime] = useState(0);      // time in seconds
   const [isRunning, setIsRunning] = useState(true); //timer on/off
+  const [gameOver, setGameOver] = useState(false) //game over set
 
   const cardData = CARD_DATA
 
@@ -40,16 +43,30 @@ const MemoryGame = () => {
     }
   }, [firstCard, secondCard, cardData])
 
-  //Timer
+  //Timer effect
   useEffect(() => {
-    if (!isRunning) return
+    if (!isRunning || gameOver) return;
 
     const interval = setInterval(() => {
-      setTime(prev => prev + 1)
-    }, 1000)
+      setTime(prev => {
+        if (prev + 1 >= maxTime) {
+          clearInterval(interval);
+          setIsRunning(false);
+          setGameOver(true); // fix
 
-    return () => clearInterval(interval)
-  }, [isRunning])
+          toast.error("⏰ Time Over! Game Over", {
+            position: "top-center",
+            autoClose: 3000,
+          });
+
+          return maxTime;
+        }
+        return prev + 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRunning, gameOver]);
 
   //stop timer when game complete 
   useEffect(() => {
@@ -62,9 +79,9 @@ const MemoryGame = () => {
     }
   }, [matchedCards, cardData])
 
-  //onclick 
+  //handleClick 
   const handleClick = (index) => {
-    if (
+    if (gameOver ||
       index === firstCard ||
       index === secondCard ||
       matchedCards.includes(index)
@@ -89,6 +106,7 @@ const MemoryGame = () => {
     setMatchedCards([])
     setTime(0)
     setIsRunning(true)
+    setGameOver(false)
   }
 
   return (
@@ -115,18 +133,19 @@ const MemoryGame = () => {
           }}
         >
           <Typography variant="h5" textAlign="center" fontWeight="bold">
-             Memory Game
+            Memory Game
           </Typography>
 
           <Typography textAlign="center" mb={2}>
-            ⏱ Time: {formatTime()}
+            ⏱ Time: {formatTime()} / {Math.floor(maxTime / 60)}:
+            {maxTime % 60 < 10 ? "0" : ""}{maxTime % 60}
           </Typography>
 
           {/* gane cards */}
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)", // 👈 ALWAYS 4 per row
+              gridTemplateColumns: "repeat(4, 1fr)", //always 4 per row
               gap: 1.5,
               mb: 2,
             }}
@@ -161,7 +180,7 @@ const MemoryGame = () => {
 
           <Stack spacing={1.2}>
             <Button variant="contained" fullWidth onClick={resetGame}>
-               Reset Game
+              Reset Game
             </Button>
             <Button
               variant="outlined"

@@ -14,11 +14,11 @@ const Register = () => {
 
     const [list, setlist] = useState([])
     const token = "wEyqnV7rzghA70Se"
-    const ini = useState({
+    const ini = {
         username: '',
         email: '',
         password: ''
-    })
+    }
     const history = useHistory();
 
     useEffect(() => {
@@ -161,7 +161,7 @@ const Register = () => {
                     </Typography>
 
                     {/* formik form */}
-                    <Formik initialValues={ini} onSubmit={handleSubmit} enableReinitialize>
+                    <Formik initialValues={ini} onSubmit={handleSubmit}>
                         <Form>
                             {/* username */}
                             <Field
@@ -246,7 +246,7 @@ const Register = () => {
                     <Typography mt={3} fontSize={14}>
                         Already have an account?{" "}
                         <Link
-                            href="/"
+                            href="/login"
                             underline="none"
                             sx={{
                                 color: "#1e3c72",
