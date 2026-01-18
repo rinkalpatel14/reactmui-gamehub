@@ -7,12 +7,12 @@ import gameHubLogo from '../../images/ghlogo.jpg'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from "react-router-dom";
 import axios from 'axios'
 
 const Register = () => {
 
-    const [list, setlist] = useState([])
+    const [list, setList] = useState([])
     const token = "wEyqnV7rzghA70Se"
     const ini = {
         username: '',
@@ -22,7 +22,7 @@ const Register = () => {
     const history = useHistory();
 
     useEffect(() => {
-        console.log("test")
+        // console.log("test")
         dataview();
     }, [])
 
@@ -34,8 +34,8 @@ const Register = () => {
             }
         })
             .then((res) => {
-                console.log(res.data.Data)
-                setlist(res.data.Data)
+                // console.log(res.data.Data)
+                setList(res.data.Data)
             })
             .catch((error) => {
                 console.log(error)

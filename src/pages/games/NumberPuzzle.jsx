@@ -24,6 +24,7 @@ const NumberPuzzle = () => {
     // game start me shuffle
     useEffect(() => {
         shuffleBoard()
+          // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClick = (index) => {
