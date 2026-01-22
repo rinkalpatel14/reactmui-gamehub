@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Card, Typography, Stack, Button } from "@mui/material";
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 import bg from '../../images/gamebg3.jpg'
 
 const NumberPuzzle = () => {
@@ -14,6 +15,7 @@ const NumberPuzzle = () => {
     //game board
     const [board, setBoard] = useState(startBoard)
     const [moves, setMoves] = useState(0)
+    const maxMove = 100;
 
     // shuffle board
     const shuffleBoard = () => {
@@ -24,19 +26,32 @@ const NumberPuzzle = () => {
     // game start me shuffle
     useEffect(() => {
         shuffleBoard()
-          // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleClick = (index) => {
-        //find index of empty box
-        const emptyIndex = board.indexOf(null) //8
-        // console.log(emptyIndex)
 
-        if (index === emptyIndex - 1 || //left num
-            index === emptyIndex + 1 || //right num
-            index === emptyIndex - 3 || //up num
-            index === emptyIndex + 3    //down num
-        ) {
+        //move limit check
+        if(moves>=maxMove){
+            toast.error("❌ Move limit reached! Try again.")
+            return
+        }
+
+
+        //find index of empty box
+        const emptyIndex = board.indexOf(null) //2
+        // console.log("empty index = ", emptyIndex)
+
+        // if (index === emptyIndex - 1 || //left num 
+        //     index === emptyIndex + 1 || //right num 
+        //     index === emptyIndex - 3 || //up num 
+        //     index === emptyIndex + 3    //down num 
+        // ) {
+
+        if (Math.abs(index - emptyIndex) === 1 && //check left & right
+            Math.floor(index / 3) === Math.floor(emptyIndex / 3) || //check row
+            Math.abs(index - emptyIndex) === 3) { //check up & down
+
             const newBoard = [...board]
             newBoard[emptyIndex] = board[index] //clicked num move to empty box
             newBoard[index] = null //num ki jagah pe empty set
@@ -48,10 +63,17 @@ const NumberPuzzle = () => {
     // win check
     const isWin = board.join() === startBoard.join();
 
+    //win msg
+    useEffect(() => {
+        if (isWin && moves > 0) {
+            toast.success(`🎯 Puzzle Solved in ${moves} moves!`)
+        }
+    }, [isWin])
+
     // reset game
     const resetGame = () => {
         shuffleBoard()
-         setMoves(0)
+        setMoves(0)
     };
 
     return (
@@ -81,7 +103,7 @@ const NumberPuzzle = () => {
                         Number Puzzle Game
                     </Typography>
                     <Typography textAlign="center" sx={{ mt: 1 }}>
-                        Moves: {moves}
+                        Moves: {moves} / {maxMove}
                     </Typography>
                     <Box
                         sx={{
@@ -111,11 +133,6 @@ const NumberPuzzle = () => {
                             </Card>
                         ))}
                     </Box>
-                    {isWin && (
-                        <Typography textAlign="center" color="lightgreen" fontWeight="bold">
-                            🎉 You Win!
-                        </Typography>
-                    )}
                     <Stack spacing={1.2}>
                         <Button variant="contained" onClick={resetGame} fullWidth>
                             Reset Game
@@ -131,6 +148,20 @@ const NumberPuzzle = () => {
                     </Stack>
                 </Card>
             </Box>
+            {/* using toast */}
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+            />
         </>
     )
 }

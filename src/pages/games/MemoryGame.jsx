@@ -21,7 +21,7 @@ const MemoryGame = () => {
   const [secondCard, setSecondCard] = useState(null)
   const [matchedCards, setMatchedCards] = useState([]);
   const [time, setTime] = useState(0);      // time in seconds
-  const [isRunning, setIsRunning] = useState(true); //timer on/off
+  const [isRunning, setIsRunning] = useState(false); //timer on/off
   const [gameOver, setGameOver] = useState(false) //game over set
 
   const cardData = CARD_DATA
@@ -45,6 +45,7 @@ const MemoryGame = () => {
 
   //Timer effect
   useEffect(() => {
+
     if (!isRunning || gameOver) return;
 
     const interval = setInterval(() => {
@@ -81,6 +82,11 @@ const MemoryGame = () => {
 
   //handleClick 
   const handleClick = (index) => {
+
+    if (!isRunning && firstCard === null && secondCard === null) {
+      setIsRunning(true);
+    }
+
     if (gameOver ||
       index === firstCard ||
       index === secondCard ||
@@ -169,11 +175,60 @@ const MemoryGame = () => {
                   boxShadow: 3,
                 }}
               >
-                {matchedCards.includes(index) ||
-                  index === firstCard ||
-                  index === secondCard
-                  ? item
-                  : "❓"}
+                <Box
+                  sx={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    transformStyle: "preserve-3d",
+                    transition: "transform 0.6s",
+                    transform:
+                      matchedCards.includes(index) ||
+                        index === firstCard ||
+                        index === secondCard
+                        ? "rotateY(180deg)"
+                        : "rotateY(0deg)",
+                  }}
+                >
+                  {/* FRONT SIDE */}
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                      backfaceVisibility: "hidden",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#1976d2",
+                      borderRadius: 2,
+                      fontSize: "24px",
+                      color: "#fff",
+                    }}
+                  >
+                    ❓
+                  </Box>
+
+                  {/* BACK SIDE */}
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                      backfaceVisibility: "hidden",
+                      transform: "rotateY(180deg)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#4caf50",
+                      borderRadius: 2,
+                      fontSize: "24px",
+                      color: "#fff",
+                    }}
+                  >
+                    {item}
+                  </Box>
+                </Box>
               </Card>
             ))}
           </Box>
