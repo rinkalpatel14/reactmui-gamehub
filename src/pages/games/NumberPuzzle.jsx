@@ -48,8 +48,8 @@ const NumberPuzzle = () => {
         //     index === emptyIndex + 3    //down num 
         // ) {
 
-        if (Math.abs(index - emptyIndex) === 1 && //check left & right
-            Math.floor(index / 3) === Math.floor(emptyIndex / 3) || //check row
+        if ((Math.abs(index - emptyIndex) === 1 && //check left & right
+            Math.floor(index / 3) === Math.floor(emptyIndex / 3)) || //check row
             Math.abs(index - emptyIndex) === 3) { //check up & down
 
             const newBoard = [...board]
@@ -68,7 +68,7 @@ const NumberPuzzle = () => {
         if (isWin && moves > 0) {
             toast.success(`🎯 Puzzle Solved in ${moves} moves!`)
         }
-    }, [isWin])
+    }, [isWin,moves])
 
     // reset game
     const resetGame = () => {
